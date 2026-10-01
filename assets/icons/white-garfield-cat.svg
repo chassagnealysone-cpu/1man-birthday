@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 220" role="img" aria-labelledby="title desc">
+  <title id="title">白色扁脸猫</title>
+  <desc id="desc">一只圆脸、短鼻、坐着的白色加菲猫风格小猫插画</desc>
+  <g stroke="#707679" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M72 76 68 48l27 14c16-7 34-7 50 0l27-14-4 28c13 13 20 30 20 49 0 41-30 72-68 72s-68-31-68-72c0-19 7-36 20-49Z" fill="#f7f4ed"/>
+    <path d="M84 162c-22 6-35 19-38 39h148c-3-21-17-34-39-40" fill="#f7f4ed"/>
+    <path d="m73 57 15 9-16 6Zm94 0-15 9 16 6Z" fill="#d9c9bd" stroke="none"/>
+    <path d="M78 105q15-12 29 0-2 19-14 19t-15-19Zm55 0q15-12 29 0-3 19-15 19t-14-19Z" fill="#dfe5e1"/>
+    <circle cx="94" cy="111" r="5" fill="#555e63" stroke="none"/>
+    <circle cx="146" cy="111" r="5" fill="#555e63" stroke="none"/>
+    <path d="M111 130q9-7 18 0-9 9-18 0Z" fill="#d49b8f"/>
+    <path d="M120 138v6m0 0q-13 9-24 0m24 0q13 9 24 0" fill="none"/>
+    <path d="M73 132 35 125m38 22-40 6m134-21 38-7m-38 22 40 6" fill="none" opacity=".7"/>
+    <path d="M89 87q-12-7-24 3m86-3q12-7 24 3M104 76q16-7 32 0M108 87q12-5 24 0" fill="none"/>
+    <path d="M177 179q28-18 39 2 9 17-15 21" fill="none"/>
+  </g>
+</svg>
