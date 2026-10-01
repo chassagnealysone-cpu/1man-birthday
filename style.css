@@ -481,7 +481,7 @@ body.is-particle-transition::after {
 .city-scene__skyline {
   position: absolute;
   right: 5.5vw;
-  bottom: 2.5%;
+  bottom: 7%;
   width: min(44vw, 790px);
   height: 83%;
   object-fit: contain;
@@ -1253,6 +1253,11 @@ body.is-particle-transition::after {
   font-family: var(--serif);
 }
 
+.letter-intro h2 {
+  font-size: clamp(2.3rem, 2.6vw, 3.3rem);
+  white-space: nowrap;
+}
+
 .envelope-stage {
   display: grid;
   place-items: center;
@@ -1387,13 +1392,26 @@ body.is-particle-transition::after {
   text-underline-offset: 0.3em;
 }
 
-.letter-sheet__signature {
+.letter-body > .letter-sheet__signature {
   margin: 68px 0 0;
+  text-indent: 0;
   text-align: right;
 }
 
 .letter-sheet__signature span {
+  display: block;
   color: rgba(44, 42, 38, 0.54);
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+}
+
+.letter-sheet__signature strong {
+  display: block;
+  margin-top: 0.35em;
+  font-size: 1.12rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
 }
 
 /* 收尾 */
