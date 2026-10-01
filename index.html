@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      name="description"
+      content="为一曼准备的一次生日蓝调漫游。"
+    />
+    <title>1man-birthday</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2304090e'/%3E%3Cellipse cx='32' cy='32' rx='22' ry='10' fill='none' stroke='%23e6a657' stroke-width='2' transform='rotate(-15 32 32)'/%3E%3Ccircle cx='39' cy='26' r='5' fill='%23d9e6ea'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="style.css?v=20260930-16" />
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+    <script src="particle-scene.js?v=20260930-13" defer></script>
+    <script src="script.js?v=20260930-14" defer></script>
+  </head>
+
+  <body class="is-locked">
+    <noscript>
+      <p class="noscript-message">这个小世界需要启用 JavaScript 才能打开。</p>
+    </noscript>
+
+    <!-- 一个全站共用的 Three.js 粒子舞台；不接收鼠标事件。 -->
+    <canvas class="particle-canvas" id="particle-canvas" aria-hidden="true"></canvas>
+
+    <!-- 第一幕：口令入口。测试口令写在 README.md 中。 -->
+    <section class="gate" id="gate" aria-label="Birthday entry">
+      <div class="gate__panel">
+        <form class="gate__form" id="access-form" novalidate>
+          <label class="sr-only" for="access-code">Enter your Key</label>
+          <input
+            id="access-code"
+            name="access-code"
+            type="password"
+            placeholder="Enter your Key"
+            aria-label="Enter your Key"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button type="submit">Enter</button>
+        </form>
+      </div>
+    </section>
+
+    <div class="site" id="birthday-site" hidden>
+      <nav class="page-controls" aria-label="上下翻页">
+        <button id="previous-page" type="button" aria-label="上一页">↑</button>
+        <button id="next-page" type="button" aria-label="下一页">↓</button>
+      </nav>
+
+      <main>
+        <!-- 第二幕：安静地进入她的世界。 -->
+        <section class="chapter chapter--intro" id="intro" data-nav-theme="light">
+          <div class="intro__copy">
+            <h2 class="intro__title reveal">
+              <span>Happy Birthday，</span>
+              <strong>一曼</strong>
+            </h2>
+            <img
+              class="intro__bouquet reveal"
+              src="assets/images/particle-tulip-bouquet-v1.png"
+              alt="淡粉色粒子郁金香花束"
+            />
+          </div>
+
+          <div class="city-scene" aria-hidden="true">
+            <img
+              class="city-scene__skyline"
+              src="assets/images/shanghai-skyline-four-handdrawn-v1.png"
+              alt=""
+            />
+          </div>
+
+        </section>
+
+        <!-- 第三幕：先穿上球衣，再完成一次投篮。 -->
+        <section class="chapter chapter--court" id="court" data-nav-theme="light">
+          <div class="court-scenes">
+            <div class="court-scene court-scene--play" id="court-play">
+              <span class="court-scene__arc" aria-hidden="true"></span>
+              <p class="court-scene__index">01 / COURTSIDE LIGHT</p>
+              <p class="court-instruction" id="court-instruction" aria-live="polite">
+                穿上你的球衣
+              </p>
+
+              <button class="jersey" id="jersey" type="button" aria-label="穿上6号球衣">
+                <span class="jersey__body" aria-hidden="true">
+                  <span class="jersey__collar"></span>
+                  <strong class="jersey__number">6</strong>
+                </span>
+              </button>
+
+              <button
+                class="drag-basketball"
+                id="drag-basketball"
+                type="button"
+                aria-label="把篮球拖进篮筐"
+                disabled
+              >
+                <span class="drag-basketball__shape" aria-hidden="true"></span>
+              </button>
+
+              <div class="hoop" id="hoop" aria-hidden="true">
+                <span class="hoop__support"></span>
+                <span class="hoop__backboard"></span>
+                <span class="hoop__rim"></span>
+                <span class="hoop__net"></span>
+                <span class="hoop__target" id="hoop-target"></span>
+              </div>
+            </div>
+
+            <article class="court-scene court-scene--story" id="court-story" hidden>
+              <p class="court-story__eyebrow">AFTER THE SHOT · 06</p>
+              <h2>关于篮球</h2>
+              <div class="court-story__copy">
+                <p>
+                  你对篮球的热爱与Passion让人感动，也反过来影响我，让我思考我真正热爱的是什么。
+                </p>
+                <p>
+                  祝接下来的比赛一切顺利，希望你可以享受舞台上的每一分钟。
+                </p>
+                <p>喜欢就前进，太累了就停下来。</p>
+                <p>
+                  你为什么不排序！我都不知道你更喜欢谁，我就默认詹姆斯的6号球衣了。原本布克和东契奇的球衣更好看的。
+                </p>
+                <p>
+                  还有反转！我最开始找WNBA的球衣没有找到合适的，然后在地铁上看订单情况时发现了Sabrina的球衣，果断把6号老詹给退了哈哈哈哈。希望你喜欢这件衣服，带着热爱继续前进吧！
+                </p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- 第四幕：安安的数字分身。 -->
+        <section class="chapter chapter--cats" id="cats" data-nav-theme="light">
+          <div class="cat-world">
+            <div class="cat-world__copy reveal">
+              <p class="chapter__number">02 / ANAN ONLINE</p>
+              <h2>安安的数字分身</h2>
+              <p class="cat-world__intro">
+                这是安安的数字分身，虽然离家很远，但是你可以在这里摸一摸他
+              </p>
+              <p class="anan-hint" id="anan-hint" aria-live="polite">摸一摸安安</p>
+            </div>
+
+            <div class="cat-playground reveal" id="cat-playground">
+              <button class="anan-avatar" id="anan-avatar" type="button" aria-label="摸一摸安安">
+                <img src="assets/images/anan-digital-avatar-v1.png" alt="白色加菲猫安安" />
+                <span class="anan-mouth-target" id="anan-mouth-target" aria-hidden="true"></span>
+              </button>
+
+              <button class="anan-bubble" id="anan-bubble" type="button" disabled hidden>
+                <span class="anan-bubble__inner">
+                  <span class="anan-bubble__face anan-bubble__front" id="anan-bubble-message" aria-live="polite">喵</span>
+                  <span class="anan-bubble__face anan-bubble__back">安安祝一曼生日快乐！喵</span>
+                </span>
+              </button>
+
+              <button class="cat-prop cat-prop--duck" type="button" data-kind="toy" aria-label="小鸭子玩具">
+                <span class="duck__head"></span><span class="duck__body"></span><span class="duck__wing"></span>
+              </button>
+              <button class="cat-prop cat-prop--yarn" type="button" data-kind="toy" aria-label="毛线球玩具"></button>
+              <button class="cat-prop cat-prop--mouse" type="button" data-kind="toy" aria-label="小老鼠玩具">
+                <span class="mouse__ear"></span><span class="mouse__tail"></span>
+              </button>
+              <button class="cat-prop cat-prop--treat" type="button" data-kind="treat" aria-label="猫条">
+                <span>CAT</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 第五幕：生日祝福。 -->
+        <section class="chapter chapter--wishes" id="wishes" data-nav-theme="light">
+          <div class="wishes__content">
+            <p class="chapter__number reveal">03 / A NEW YEAR</p>
+            <h2 class="reveal">希望新的一岁——</h2>
+
+            <div class="wish-lines">
+              <p class="reveal"><span>01</span> 有舒骚的比赛</p>
+              <p class="reveal"><span>02</span> 有想去就去的地方</p>
+              <p class="reveal"><span>03</span> 有很多粘你的小猫</p>
+              <p class="reveal"><span>04</span> 有称心如意的选择</p>
+              <p class="reveal"><span>05</span> 有低落时的情绪出口</p>
+            </div>
+
+            <p class="wishes__ending reveal">
+              希望你更自在地做自己。
+            </p>
+          </div>
+        </section>
+
+        <!-- 第六幕：信。第一版只验证打开和阅读体验。 -->
+        <section class="chapter chapter--letter" id="letter" data-nav-theme="light">
+          <div class="letter-intro reveal">
+            <p class="chapter__number">04 / ONE LAST THING</p>
+            <p class="eyebrow eyebrow--warm">最后一站</p>
+            <h2>最后，还有一些话<br />想和你说。</h2>
+            <p>这里不需要特效。等你准备好，再打开。</p>
+          </div>
+
+          <div class="envelope-stage reveal">
+            <button
+              class="envelope"
+              id="open-letter"
+              aria-expanded="false"
+              aria-controls="letter-sheet"
+            >
+              <span class="envelope__back" aria-hidden="true"></span>
+              <span class="envelope__paper" aria-hidden="true">FOR YIMAN</span>
+              <span class="envelope__front" aria-hidden="true"></span>
+              <span class="envelope__flap" aria-hidden="true"></span>
+              <span class="envelope__prompt">打开信封</span>
+            </button>
+          </div>
+
+          <article class="letter-sheet" id="letter-sheet" hidden tabindex="-1">
+            <p class="letter-sheet__date">写于30日 · 机场</p>
+            <p class="letter-sheet__salutation">亲爱的1man：</p>
+
+            <div class="letter-body">
+              <p>生日快乐，李伟曼！恭喜你成为一个老奶了！</p>
+
+              <p>
+                我很久没有写信了，心有千言，然寥寥几笔难以成诗。坐在30日机场的座椅上，我写下这段文字，希望给你新的一岁送去祝福，给你的回忆装点一小撮美好。
+              </p>
+
+              <p>
+                谢谢你的热情款待，让我在上海留下了很棒的回忆，和你在一起的每一天都很美好。我记住了新所里书店门口的蝴蝶，记住了北外滩前的高楼林立，记住了你们学校里的异瞳白猫，我还记住了欢乐谷里让人腰疼的疯狂精灵和带蓝色帽子的社恐女孩。离开的时候还是有一点舍不得。不过上海真的好漂亮哇！它的活力与先进着实让人向往，看似排外实则包罗万象，置身其中便有一种天地广阔大展身手的渴望。想来还是有一点点淡淡的遗憾&gt;-&lt;。
+              </p>
+
+              <p>
+                谢谢你在我低落时听我倒苦水，听我讲各种各样奇奇怪怪的感悟，然后认真地给我回复。你总是耐心又温柔，勇敢又坚韧。我从你的身上学到了很多东西。你的真诚，你的分寸，你的耐心，还有许多珍贵的品质。你的魅力如同桂花的香气，温柔地飘散在周身。
+              </p>
+
+              <p>
+                当然，这些都是你，或许也不是你。也希望你以后可以更自在地展现真实的自己。无论开心还是烦恼，如果想找个人聊聊，我随时欢迎，就像你对我的那样。
+              </p>
+
+              <p>
+                希望你在新的一岁仍葆有心气与热爱，想要的就去大胆争取，享受在舞台上的每一刻。
+              </p>
+
+              <aside class="letter-postscript">
+                <p>
+                  （这个网站的 idea 是我看到了一个很有意思的
+                  <a
+                    href="https://hanghao1111222.github.io/romantic/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >粒子互动界面</a>想到的。第一次尝试做这样的小东西，虽然还有一些不足，但希望它能给你的生日增加一点小惊喜。）
+                </p>
+              </aside>
+            </div>
+          </article>
+        </section>
+
+        <!-- 第七幕：重新变轻。 -->
+        <section class="chapter chapter--ending" id="ending" data-nav-theme="light">
+          <button class="ending-cat reveal" id="ending-cat" aria-describedby="ending-reply">
+            <img src="assets/images/anan-digital-avatar-v1.png" alt="安安" />
+            <small>摸一下再走</small>
+          </button>
+          <p class="ending__reply" id="ending-reply" aria-live="polite" hidden></p>
+        </section>
+      </main>
+
+      <footer>
+        <span>YIMAN · BIRTHDAY PROTOTYPE 01</span>
+        <span>Made slowly, for one particular day.</span>
+      </footer>
+    </div>
+  </body>
+</html>

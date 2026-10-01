@@ -1,0 +1,7 @@
+# Local visual QA captures; not needed by the published website.
+assets/preview/
+
+# Operating-system and local tool files.
+.DS_Store
+Thumbs.db
+*.log
