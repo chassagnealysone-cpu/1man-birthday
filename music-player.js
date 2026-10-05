@@ -42,6 +42,8 @@
     fold.setAttribute('aria-label', collapsed ? '展开音乐播放器' : '收起音乐播放器');
     sync();
   }
+  // Only collapse on successful entry; later page turns preserve the user's choice.
+  document.addEventListener('birthday:entered', () => setCollapsed(true), { once: true });
   fold.addEventListener('click', () => setCollapsed(!player.classList.contains('is-collapsed')));
   record.addEventListener('click', () => player.classList.contains('is-collapsed') ? setCollapsed(false) : togglePlayback());
   toggle.addEventListener('click', togglePlayback);

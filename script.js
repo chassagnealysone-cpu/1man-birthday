@@ -25,6 +25,7 @@ function normalizeCode(value) {
 }
 
 async function openBirthdaySite() {
+  document.dispatchEvent(new Event('birthday:entered'));
   accessInput.removeAttribute("aria-invalid");
   accessForm.classList.remove("is-error");
   accessInput.disabled = true;
