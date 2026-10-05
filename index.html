@@ -19,9 +19,26 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
     <script src="particle-scene.js?v=20260930-13" defer></script>
     <script src="script.js?v=20260930-14" defer></script>
+    <link rel="stylesheet" href="music-player.css?v=20261006" />
+    <script src="music-player.js?v=20261006" defer></script>
   </head>
 
   <body class="is-locked">
+    <audio id="background-music" src="assets/music/lovin-you.mp3" preload="auto" autoplay loop></audio>
+    <aside class="music-player" id="music-player" aria-label="背景音乐播放器">
+      <button class="music-player__fold" id="music-fold" type="button" aria-label="收起音乐播放器" aria-expanded="true" aria-controls="music-details">−</button>
+      <button class="music-player__record" id="music-record" type="button" aria-label="播放背景音乐">
+        <span class="music-player__vinyl"><img src="assets/images/lovin-you-cover.jpg" alt="Tussie mussie 专辑封面" /></span>
+      </button>
+      <div id="music-details" class="music-player__details">
+        <div class="music-player__controls">
+          <button id="music-toggle" type="button" aria-label="播放背景音乐">▶</button>
+          <button id="music-mute" type="button" aria-label="静音" aria-pressed="false">♪</button>
+          <input id="music-volume" type="range" min="0" max="100" value="30" aria-label="背景音乐音量" />
+        </div>
+        <p id="music-status" class="sr-only" aria-live="polite">轻轻点一下，让音乐开始</p>
+      </div>
+    </aside>
     <noscript>
       <p class="noscript-message">这个小世界需要启用 JavaScript 才能打开。</p>
     </noscript>
