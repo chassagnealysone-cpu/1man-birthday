@@ -82,13 +82,19 @@ accessForm.addEventListener("submit", (event) => {
 });
 
 // 每次只显示一幕；长内容仍用同一组按钮分屏阅读。
+function chapterReader(chapter) {
+  // 小窗口里的篮球正文也可以用原来的上下按钮读完。
+  return chapter.id === "court" && courtStoryReached ? courtStory : chapter;
+}
+
 function updatePageControls() {
   const chapter = chapters[activeChapter];
+  const reader = chapterReader(chapter);
   const courtNeedsCompletion = chapter.id === "court" && !courtStoryReached;
-  previousPage.disabled = activeChapter === 0 && chapter.scrollTop < 2;
+  previousPage.disabled = activeChapter === 0 && reader.scrollTop < 2;
   nextPage.disabled = courtNeedsCompletion || (
     activeChapter === chapters.length - 1 &&
-    chapter.scrollTop >= chapter.scrollHeight - chapter.clientHeight - 2
+    reader.scrollTop >= reader.scrollHeight - reader.clientHeight - 2
   );
   pageControls.classList.toggle("is-on-light", chapter.dataset.navTheme === "light");
   pageControls.classList.toggle(
@@ -104,7 +110,8 @@ function showChapter(index, fromBottom = false) {
     chapter.querySelectorAll(".reveal").forEach((element) => element.classList.add("is-visible"));
   });
   const chapter = chapters[index];
-  chapter.scrollTop = fromBottom ? chapter.scrollHeight : 0;
+  const reader = chapterReader(chapter);
+  reader.scrollTop = fromBottom ? reader.scrollHeight : 0;
   if (!reducedMotion.matches) {
     chapter.animate(
       [{ opacity: 0, transform: `translateY(${fromBottom ? "-14px" : "14px"})` },
@@ -119,11 +126,12 @@ function showChapter(index, fromBottom = false) {
 async function turnPage(direction) {
   if (turningPage || birthdaySite.hidden) return;
   const chapter = chapters[activeChapter];
-  const maxScroll = chapter.scrollHeight - chapter.clientHeight;
-  const hasMore = direction > 0 ? chapter.scrollTop < maxScroll - 2 : chapter.scrollTop > 2;
+  const reader = chapterReader(chapter);
+  const maxScroll = reader.scrollHeight - reader.clientHeight;
+  const hasMore = direction > 0 ? reader.scrollTop < maxScroll - 2 : reader.scrollTop > 2;
   if (hasMore) {
-    chapter.scrollTo({
-      top: Math.max(0, Math.min(maxScroll, chapter.scrollTop + direction * chapter.clientHeight * 0.8)),
+    reader.scrollTo({
+      top: Math.max(0, Math.min(maxScroll, reader.scrollTop + direction * reader.clientHeight * 0.8)),
       behavior: reducedMotion.matches ? "instant" : "smooth",
     });
   } else {
@@ -161,6 +169,17 @@ document.addEventListener("keydown", (event) => {
       (event.key === " " && !event.target.closest("button"))) event.preventDefault();
 });
 window.addEventListener("resize", () => {
+  // 拖拽后的行内像素坐标不能沿用到新窗口尺寸；回到随布局变化的原位。
+  if (!draggingBasketball && !courtStoryReached && !dragBasketball.classList.contains("is-scored")) {
+    dragBasketball.style.removeProperty("left");
+    dragBasketball.style.removeProperty("top");
+    ballHome = null;
+  }
+  catProps.forEach((prop) => {
+    if (prop === draggedCatProp || prop.classList.contains("is-eaten")) return;
+    ["left", "top", "right", "bottom"].forEach((name) => prop.style.removeProperty(name));
+    catPropHomes.delete(prop);
+  });
   if (!birthdaySite.hidden) updatePageControls();
 });
 
@@ -197,18 +216,16 @@ jersey.addEventListener("click", () => {
 });
 
 function rememberBallHome() {
-  const stageRect = courtPlay.getBoundingClientRect();
-  const ballRect = dragBasketball.getBoundingClientRect();
   ballHome = {
-    left: ballRect.left - stageRect.left,
-    top: ballRect.top - stageRect.top,
+    left: dragBasketball.offsetLeft / courtPlay.clientWidth * 100,
+    top: dragBasketball.offsetTop / courtPlay.clientHeight * 100,
   };
 }
 
 function returnBallHome() {
   if (!ballHome) return;
-  dragBasketball.style.left = `${ballHome.left}px`;
-  dragBasketball.style.top = `${ballHome.top}px`;
+  dragBasketball.style.left = `${ballHome.left}%`;
+  dragBasketball.style.top = `${ballHome.top}%`;
 }
 
 function revealCourtStory() {
@@ -263,14 +280,14 @@ dragBasketball.addEventListener("pointerdown", (event) => {
   if (!jerseyReady || dragBasketball.disabled || event.button !== 0) return;
   if (!ballHome) rememberBallHome();
 
+  draggingBasketball = true;
+  dragBasketball.classList.add("is-dragging");
   const stageRect = courtPlay.getBoundingClientRect();
   const ballRect = dragBasketball.getBoundingClientRect();
   dragOffsetX = event.clientX - ballRect.left;
   dragOffsetY = event.clientY - ballRect.top;
   dragBasketball.style.left = `${ballRect.left - stageRect.left}px`;
   dragBasketball.style.top = `${ballRect.top - stageRect.top}px`;
-  draggingBasketball = true;
-  dragBasketball.classList.add("is-dragging");
   dragBasketball.setPointerCapture(event.pointerId);
   event.preventDefault();
 });
@@ -341,19 +358,17 @@ ananAvatar.addEventListener("click", () => {
 
 function rememberCatPropHome(prop) {
   if (catPropHomes.has(prop)) return;
-  const stageRect = catPlayground.getBoundingClientRect();
-  const propRect = prop.getBoundingClientRect();
   catPropHomes.set(prop, {
-    left: propRect.left - stageRect.left,
-    top: propRect.top - stageRect.top,
+    left: prop.offsetLeft / catPlayground.clientWidth * 100,
+    top: prop.offsetTop / catPlayground.clientHeight * 100,
   });
 }
 
 function returnCatPropHome(prop) {
   const home = catPropHomes.get(prop);
   if (!home) return;
-  prop.style.left = `${home.left}px`;
-  prop.style.top = `${home.top}px`;
+  prop.style.left = `${home.left}%`;
+  prop.style.top = `${home.top}%`;
 }
 
 function finishCatPropDrag(event) {
@@ -399,18 +414,19 @@ function finishCatPropDrag(event) {
 
 catProps.forEach((prop) => {
   prop.addEventListener("pointerdown", (event) => {
-    if (prop.classList.contains("is-eaten")) return;
+    if (event.button !== 0 || draggedCatProp || prop.classList.contains("is-eaten")) return;
     rememberCatPropHome(prop);
-    const stageRect = catPlayground.getBoundingClientRect();
-    const propRect = prop.getBoundingClientRect();
-    catPropOffsetX = event.clientX - propRect.left;
-    catPropOffsetY = event.clientY - propRect.top;
-    prop.style.left = `${propRect.left - stageRect.left}px`;
-    prop.style.top = `${propRect.top - stageRect.top}px`;
+    const startLeft = prop.offsetLeft;
+    const startTop = prop.offsetTop;
+    prop.style.left = `${startLeft}px`;
+    prop.style.top = `${startTop}px`;
     prop.style.right = "auto";
     prop.style.bottom = "auto";
     draggedCatProp = prop;
     prop.classList.add("is-dragging");
+    const propRect = prop.getBoundingClientRect();
+    catPropOffsetX = event.clientX - propRect.left;
+    catPropOffsetY = event.clientY - propRect.top;
     prop.setPointerCapture(event.pointerId);
     event.preventDefault();
   });
@@ -458,8 +474,8 @@ openLetterButton.addEventListener("click", () => {
     if (chapter.id === "letter") {
       chapter.classList.add("is-reading");
       letterSheet.focus({ preventScroll: true });
-      const top = letterSheet.getBoundingClientRect().top - chapter.getBoundingClientRect().top + chapter.scrollTop;
-      chapter.scrollTo({ top, behavior: reducedMotion.matches ? "instant" : "smooth" });
+      // 阅读模式只显示信纸，从开头读起，不让入场动画的位移影响滚动位置。
+      chapter.scrollTo({ top: 0, behavior: reducedMotion.matches ? "instant" : "smooth" });
       window.setTimeout(updatePageControls, 650);
     }
   }, 650);
